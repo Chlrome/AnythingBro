@@ -12,8 +12,7 @@ def send_message(text: str):
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     payload = {
         "chat_id": CHAT_ID,
-        "text": text,
-        "parse_mode": "Markdown"
+        "text": text
     }
     r = requests.post(url, json=payload, timeout=10)
     r.raise_for_status()
@@ -24,9 +23,8 @@ def main():
     with open(MESSAGES_FILE, "r", encoding="utf-8") as f:
         messages = json.load(f)
 
-    for entry in messages:
-        if entry["date"] == today:
-            send_message(entry["message"])
+    if today in messages:
+        send_message(messages[today])
 
 if __name__ == "__main__":
     main()
